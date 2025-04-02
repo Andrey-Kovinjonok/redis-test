@@ -1,0 +1,30 @@
+FROM alpine:3.21.3
+
+LABEL maintainer="VG"
+LABEL name="redis-test"
+LABEL version="latest"
+
+RUN echo '@edge https://dl-cdn.alpinelinux.org/alpine/edge/main' >> /etc/apk/repositories && \
+    echo '@edgecommunity https://dl-cdn.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories && \
+    apk update && \
+    apk add --no-cache \
+    nodejs@edgecommunity=22.13.1-r0 \
+    npm@edgecommunity=10.9.1-r0 \
+    redis \
+    # postgresql15-client \
+    bash \
+    # make gcc g++ python3 \
+    su-exec
+
+RUN apk add --no-cache
+
+RUN mkdir -p /data/redis && \
+    chown redis:redis /data/redis
+
+WORKDIR /app
+
+COPY entrypoint.sh /entrypoint.sh
+COPY redis.conf /usr/local/etc/redis/redis.conf
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT ["/entrypoint.sh"]

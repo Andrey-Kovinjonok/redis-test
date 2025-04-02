@@ -1,0 +1,82 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Debug TS with Params",
+            "runtimeArgs": [
+                "-r",
+                "ts-node/register"
+            ],
+            "args": [
+                "src/index.ts"
+            ],
+            "env": {
+                "PRODUCERS_COUNT": "8",
+                "MAX_NUMBER": "500000"
+            },
+            "cwd": "${workspaceFolder}",
+            "skipFiles": [
+                "<node_internals>/**"
+            ]
+        },
+        //   {
+        //     "type": "bun",
+        //     "request": "launch",
+        //     "name": "Debug Bun",
+        //     // The path to a JavaScript or TypeScript file to run.
+        //     "program": "${file}",
+        //     // The arguments to pass to the program, if any.
+        //     "args": [],
+        //     // The working directory of the program.
+        //     "cwd": "${fileDirname}",
+        //     // The environment variables to pass to the program.
+        //     "env": {},
+        //     // If the environment variables should not be inherited from the parent process.
+        //     "strictEnv": false,
+        //     // If the program should be run in watch mode.
+        //     // This is equivalent to passing `--watch` to the `bun` executable.
+        //     // You can also set this to "hot" to enable hot reloading using `--hot`.
+        //     "watchMode": false,
+        //     // If the debugger should stop on the first line of the program.
+        //     "stopOnEntry": false,
+        //     // If the debugger should be disabled. (for example, breakpoints will not be hit)
+        //     "noDebug": false,
+        //     // The path to the `bun` executable, defaults to your `PATH` environment variable.
+        //     "runtime": "bun",
+        //     // The arguments to pass to the `bun` executable, if any.
+        //     // Unlike `args`, these are passed to the executable itself, not the program.
+        //     "runtimeArgs": [],
+        //   },
+        //   {
+        //     "type": "chrome",
+        //     //"preLaunchTask": "launch-json",
+        //     "request": "launch",
+        //     "name": "CLIENT",
+        //     // "webRoot": "${workspaceFolder}/app/src",
+        //     "url": "http://localhost:5173",
+        //     // "url": "http://localhost:3000/li/5000000010742790/visits/groups",
+        //     "webRoot": "${workspaceFolder}/react-client/src",
+        //     "userDataDir": "${workspaceFolder}/.vscode/chrome",
+        //     // "userDataDir": "/Volumes/RAMDisk/",
+        //     // diskutil erasevolume HFS+ "RAMDisk" hdiutil attach -nomount ram://4194304
+        //     // 256 MB = 524288
+        //     // 512 MB = 1048576
+        //     // 1 GB = 2097152
+        //     // 2 GB = 4194304
+        //     "showAsyncStacks": true,
+        //     "sourceMaps": true,
+        //     "sourceMapPathOverrides": {
+        //       // "webpack:///./src/client/*": "${webRoot}/*"
+        //       // "webpack:///src/client/*": "${webRoot}/*"
+        //       // "webpack:///./src/client/*": "${webRoot}/*"
+        //       // "webpack:///./src/client/*": "${workspaceFolder}/*"
+        //       "webpack:///./src/*": "${webRoot}/*"
+        //     }
+        // }
+    ]
+}

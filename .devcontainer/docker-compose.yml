@@ -1,0 +1,31 @@
+version: '3.8'
+
+
+services:
+  redis-test:
+    # platform: linux/arm64
+
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile-alpine
+    container_name: "redis-test"
+    volumes:
+      - "../.:/app:cached"
+
+
+    ports:
+      - "6379:6379"  # Redis
+      # - "5432:5432"  # PostgreSQL
+
+    environment:
+      - NODE_ENV=development
+      - PRODUCERS_COUNT=${PRODUCERS_COUNT:-4}
+      - MAX_NUMBER=${MAX_NUMBER:-100000}
+
+    security_opt:
+      - seccomp:unconfined
+
+    mem_limit: 4g
+
+    # command: sh -c "npm install && tsc && node dist/index.js"
+    command: /bin/sh -c "cp; while sleep 1000; do :; done"

@@ -1,0 +1,18 @@
+{
+  "editor.formatOnPaste": false,
+  "editor.formatOnSave": true,
+  "editor.detectIndentation": true,
+  "editor.tabSize": 2,
+  "diffEditor.renderSideBySide": true,
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.vscode-server/**": true
+  },
+  "typescript.tsserver.log": "verbose",
+  "typescript.include": [
+    "**/*.ts"
+  ],
+  // "typescript.exclude": ["**/*.js"]
+}
