@@ -10,16 +10,18 @@ export interface Config {
   LOG_INTERVAL: number;
 }
 
+const MAX_NUMBER = parseInt(process.env.MAX_NUMBER || "100000");
+
 export const config: Config = {
   PRODUCERS_COUNT: parseInt(process.env.PRODUCERS_COUNT || "4"),
   MIN_NUMBER: 0,
-  MAX_NUMBER: parseInt(process.env.MAX_NUMBER || "100000"), // включительно: от 0 до MAX_NUMBER
+  MAX_NUMBER, //
   REDIS_HOST: process.env.REDIS_HOST || "localhost",
   REDIS_PORT: parseInt(process.env.REDIS_PORT || "6379"),
   STREAM_KEY: "numbers_stream",
   COMPLETION_CHANNEL: "completion_channel",
   BLOCK_SIZE: 5000,
-  LOG_INTERVAL: 5000,
+  LOG_INTERVAL: MAX_NUMBER / 100,
 };
 
 export function printConfig(cfg: Config) {

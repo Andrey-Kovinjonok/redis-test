@@ -1,4 +1,3 @@
-// src/index.ts
 import { Worker } from 'worker_threads';
 import Redis from 'ioredis';
 
@@ -12,6 +11,10 @@ let stopInitiated = false;
 
 async function gracefulShutdown(timeoutMs: number): Promise<void> {
   console.log('\nInitiating graceful shutdown...');
+
+  const stopNotifier = new Redis(config.REDIS_PORT, config.REDIS_HOST);
+  await stopNotifier.publish(config.COMPLETION_CHANNEL, 'STOP');
+  await stopNotifier.quit();
 
   workers.forEach((worker) => {
     worker.postMessage({ type: 'STOP' });
@@ -33,6 +36,7 @@ async function gracefulShutdown(timeoutMs: number): Promise<void> {
           reject(new Error(`Worker ${index + 1} exited with error code ${code}.`));
         }
       });
+
     })
   );
 
@@ -51,6 +55,11 @@ async function gracefulShutdown(timeoutMs: number): Promise<void> {
     } catch (subErr) {
       console.error('Error during PubSub cleanup:', subErr);
     }
+
+    console.log('🏁 All clean, exiting main process');
+    setTimeout(() => {
+      process.exit(0);
+    }, 1000); //
   }
 }
 
@@ -71,10 +80,13 @@ async function main() {
 
   workers.push(
     ...Array.from({ length: config.PRODUCERS_COUNT }, (_, i) => {
-      const worker = new Worker('./src/producer.worker.ts', {
-        workerData: config
-      });
-      // ... обработчики worker.on ...
+      const worker = new Worker(
+        './src/producer.worker.ts',
+        {
+          workerData: config,
+        },
+      );
+
       worker.on('online', () => {
         worker.postMessage({
           type: 'INIT_THREAD_ID',

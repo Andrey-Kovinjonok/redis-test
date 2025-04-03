@@ -17,7 +17,7 @@
             ],
             "env": {
                 "PRODUCERS_COUNT": "8",
-                "MAX_NUMBER": "500000"
+                "MAX_NUMBER": "200000"
             },
             "cwd": "${workspaceFolder}",
             "skipFiles": [

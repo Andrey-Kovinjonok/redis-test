@@ -10,6 +10,7 @@ lerna-debug.log*
 # websocketpp-0.8.2/
 env.hpp
 
+result.json
 node_modules
 Debug
 CMakeFiles

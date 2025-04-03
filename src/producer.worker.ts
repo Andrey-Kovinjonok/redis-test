@@ -1,4 +1,3 @@
-// producer.worker.ts
 import { workerData, parentPort } from 'worker_threads';
 import { Redis } from 'ioredis';
 import { Config } from './config';
@@ -43,25 +42,6 @@ pubSub.subscribe(COMPLETION_CHANNEL, (err) => {
   }
 });
 
-// redis.defineCommand('batchXADD', {
-//   numberOfKeys: 1,
-//   lua: `
-//     local stream_key = KEYS[1]
-//     local nums_added = 0
-//     for i, num_str in ipairs(ARGV) do
-//       redis.call('XADD', stream_key, '*', 'num', num_str)
-//       nums_added = nums_added + 1
-//     end
-//     return nums_added
-//   `,
-// });
-
-// declare module 'ioredis' {
-//   interface RedisCommander<Context = unknown> {
-//     batchXADD(key: string, ...args: (string | number)[]): Promise<number>;
-//   }
-// }
-
 const PUBLISHER_BULK_SCRIPT = `
   local streamKey = KEYS[1]
   local count = #ARGV
@@ -90,26 +70,17 @@ async function generateBatchLoop() {
 
   try {
     while (!shouldStop) {
-      const pipeline = redis.pipeline();
 
       for (let i = 0; i < BLOCK_SIZE; i++) {
         numberBuffer[i] = Math.floor(Math.random() * RANGE) + MIN_NUMBER;
       }
 
-      // for (let i = 0; i < BLOCK_SIZE; i++) {
-      //   pipeline.xadd(STREAM_KEY, '*', 'num', numberBuffer[i].toString());
-      // }
-      // const added = await redis.batchXADD(
-      //   STREAM_KEY,
-      //   ...numbers.map(String)
-      // );
       const count = await redis.eval(
         PUBLISHER_BULK_SCRIPT,
         1,
         STREAM_KEY,
         ...numberBuffer.map(String)
       );
-      await pipeline.exec();
 
       batchesLogged++;
       messagesSent += (BLOCK_SIZE);
@@ -120,14 +91,16 @@ async function generateBatchLoop() {
   } finally {
     clearInterval(logTimer);
     try {
+      // redis.disconnect(true);
       await redis.quit();
+      // await pubSub.disconnect(true);
       await pubSub.quit();
     } catch (e) {
       console.error('Error while closing redis connections:', e);
     }
 
     console.log(`💤 Producer ${threadId} exiting...`);
-    process.exit(0);
+    setImmediate(() => process.exit(0));
   }
 }
 
